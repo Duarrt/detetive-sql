@@ -26,7 +26,7 @@ Sirva a pasta como está (GitHub Pages, Cloudflare Pages, Netlify ou o seu servi
 - **GitHub Pages:** não aceita cabeçalhos customizados; a CSP do `<meta>` em cada página cobre o principal (sem `frame-ancestors`).
 - **Servidor próprio (nginx, Apache etc.):** replique os cabeçalhos de `_headers` na configuração e force HTTPS.
 
-Antes de publicar, troque o e-mail de contato em `privacidade.html` e `privacy.html`.
+O e-mail de contato fica em `privacidade.html` e `privacy.html`.
 
 ## Privacidade e segurança
 
