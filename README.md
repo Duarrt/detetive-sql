@@ -105,16 +105,6 @@ python3 -m http.server 8000
 
 > Abrir o `index.html` com dois cliques não funciona: a política de segurança exige que os arquivos sejam servidos por HTTP.
 
-### Publicar
-
-Sirva a pasta como está.
-
-| Onde | Observação |
-|---|---|
-| GitHub Pages | Settings → Pages → `main` / `(root)`. Usa a CSP do `<meta>` em cada página. |
-| Cloudflare Pages / Netlify | O arquivo `_headers` aplica a CSP e os demais cabeçalhos de segurança. |
-| Servidor próprio | Replique os cabeçalhos de `_headers` e force HTTPS. |
-
 ### Estrutura
 
 ```
