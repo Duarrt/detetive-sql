@@ -106,3 +106,9 @@ details.schema summary{cursor:pointer;font:15px 'Special Elite',monospace;color:
 .rank{margin-left:0}
 .top .lang{margin-left:auto}
 @media(max-width:900px){.top .lang{margin-left:0}}
+.hints{align-items:center}
+.worth{font:14px 'Courier Prime',monospace;color:var(--muted)}
+.worth b{color:var(--red)}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.top .lang{margin-left:0;justify-self:end}
+.top .rank{grid-column:1/-1;justify-self:start;margin-left:0}

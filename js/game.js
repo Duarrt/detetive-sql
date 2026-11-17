@@ -68,6 +68,8 @@ function renderHints() {
   $('hintBox').innerHTML = h;
   $('hintBtn').disabled = n >= c.dicas.length;
   $('hintBtn').style.opacity = n >= c.dicas.length ? .4 : 1;
+  const d = st.done[st.cur];
+  $('caseValue').innerHTML = d !== undefined ? T.worthDone(d) : T.worth(value());
 }
 function value() {
   const h = st.hints[st.cur] || 0;
@@ -127,6 +129,7 @@ function check() {
   save();
   say('good', `${T.correct}${first ? '+' + st.done[st.cur] + ' XP. ' : ''}${esc(c.fim)}`);
   $('stamp').className = 'stamp show';
+  renderHints();
   const rankBefore = $('rankName').textContent;
   renderTabs(); renderRank();
   if (first) setTimeout(() => {
