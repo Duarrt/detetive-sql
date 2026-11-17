@@ -99,3 +99,10 @@ details.schema summary{cursor:pointer;font:15px 'Special Elite',monospace;color:
 .doc h3{font-size:20px;margin:22px 0 6px;color:var(--red)}
 .doc p{margin:0 0 10px}
 .doc .back a,.doc a{color:var(--red)}
+.top h1 b{font-weight:400}
+.lang{display:flex;border:2px solid var(--manila);border-radius:6px;overflow:hidden}
+.lang button{background:transparent;color:var(--manila);border:0;border-radius:0;min-height:36px;min-width:44px;padding:0 10px;font-size:13px}
+.lang button[aria-pressed=true]{background:var(--manila);color:var(--ink)}
+.rank{margin-left:0}
+.top .lang{margin-left:auto}
+@media(max-width:900px){.top .lang{margin-left:0}}

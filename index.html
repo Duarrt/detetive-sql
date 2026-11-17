@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Jogo de detetive para aprender SQL do básico ao avançado, direto no navegador.">
+<meta name="description" content="Jogo de detetive para aprender SQL do básico ao avançado, direto no navegador. / A detective game to learn SQL from basic to advanced, right in your browser.">
 <link rel="icon" href="data:,">
 <title>Detetive SQL</title>
 <link rel="stylesheet" href="css/style.css">
@@ -13,7 +13,8 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>Detetive SQL <span>Pequenos Delitos</span></h1>
+    <h1><b data-i18n="brand">Detetive SQL</b> <span data-i18n="tagline">Pequenos Delitos</span></h1>
+    <div class="lang" id="langSwitch" role="group" aria-label="Idioma"><button type="button" data-lang="pt" aria-pressed="true">PT</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
     <div class="rank">
       <div class="badge" id="rankName">Estagiária do Arquivo Morto</div>
       <div><div class="xpbar"><i id="xpFill"></i></div><div id="xpTxt" class="xptxt">0 XP</div></div>
@@ -22,36 +23,38 @@
   <nav class="tabs" id="tabs" aria-label="Casos"></nav>
   <main class="board">
     <section class="file" aria-live="polite">
-      <div class="stamp" id="stamp">CASO ENCERRADO</div>
+      <div class="stamp" id="stamp" data-i18n="stamp">CASO ENCERRADO</div>
       <div class="meta"><span id="caseNo"></span><span id="phase"></span></div>
       <h2 id="title"></h2>
       <div class="chief">
         <svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><path d="M19 25h6M29 25h6" stroke="#2a1d14" stroke-width="1.5"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg>
         <p class="story" id="story"></p>
       </div>
-      <div class="lesson"><h3>Manual do detetive</h3><div id="concept"></div><pre id="example"></pre></div>
+      <div class="lesson"><h3 data-i18n="manual">Manual do detetive</h3><div id="concept"></div><pre id="example"></pre></div>
       <div class="goal" id="goal"></div>
-      <div class="hints"><button class="ghost" id="hintBtn">Pedir dica (−30 XP)</button><button class="ghost" id="solBtn">Ver solução (fica só 10 XP)</button></div>
+      <div class="hints"><button class="ghost" id="hintBtn" data-i18n="hintBtn">Pedir dica (−30 XP)</button><button class="ghost" id="solBtn" data-i18n="solBtn">Ver solução (fica só 10 XP)</button></div>
       <div id="hintBox"></div>
     </section>
     <section class="term">
-      <label for="sql">Terminal de interrogatório — Ctrl+Enter para executar</label>
+      <label for="sql" data-i18n="termLabel">Terminal de interrogatório — Ctrl+Enter para executar</label>
       <textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
       <div class="row">
-        <button class="run" id="runBtn">Interrogar o banco</button>
-        <button class="sec" id="checkBtn">Entregar ao delegado</button>
-        <button class="sec" id="clearBtn">Limpar</button>
+        <button class="run" id="runBtn" data-i18n="runBtn">Interrogar o banco</button>
+        <button class="sec" id="checkBtn" data-i18n="checkBtn">Entregar ao delegado</button>
+        <button class="sec" id="clearBtn" data-i18n="clearBtn">Limpar</button>
       </div>
       <div id="verdict"></div>
       <div id="result"></div>
-      <details class="schema" open><summary>Arquivo de evidências (tabelas)</summary><div class="tables" id="schema"></div></details>
+      <details class="schema" open><summary data-i18n="schema">Arquivo de evidências (tabelas)</summary><div class="tables" id="schema"></div></details>
     </section>
   </main>
-  <p class="foot">Todos os moradores, crimes e bigodes são fictícios. O progresso fica salvo só neste navegador. <a href="privacidade.html">Privacidade</a>. <button class="sec small" id="resetBtn">Zerar progresso</button></p>
+  <p class="foot"><span data-i18n="foot">Todos os moradores, crimes e bigodes são fictícios. O progresso fica salvo só neste navegador.</span> <a id="privLink" href="privacidade.html" data-i18n="privacy">Privacidade</a> <button class="sec small" id="resetBtn" data-i18n="reset">Zerar progresso</button></p>
 </div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h2 id="mTitle"></h2><div class="mxp" id="mXp"></div><div class="quote"><svg width="44" height="44" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg><p id="mText"></p></div><div id="mEvid"></div><div class="row"><button class="run" id="mNext">Próximo caso</button><button class="ghost" id="mStay">Ficar aqui</button></div></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h2 id="mTitle"></h2><div class="mxp" id="mXp"></div><div class="quote"><svg width="44" height="44" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg><p id="mText"></p></div><div id="mEvid"></div><div class="row"><button class="run" id="mNext" data-i18n="next">Próximo caso</button><button class="ghost" id="mStay" data-i18n="stay">Ficar aqui</button></div></div></div>
 
+<script src="js/i18n.js"></script>
 <script src="js/data.js"></script>
+<script src="js/data-en.js"></script>
 <script src="vendor/sql.js/sql-asm.js"></script>
 <script src="js/game.js"></script>
 </body>
