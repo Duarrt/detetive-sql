@@ -120,6 +120,7 @@ vendor/sql.js/      sql.js 1.13.0 (build asm.js)
 vendor/goatcounter/ count.js do GoatCounter (contagem de visitas)
 fonts/              Special Elite, Courier Prime, Work Sans
 docs/img/           imagens deste README
+og-image.png        imagem de prévia para links (Open Graph)
 _headers            cabeçalhos para Cloudflare Pages / Netlify
 ```
 
