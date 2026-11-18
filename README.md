@@ -87,8 +87,8 @@ flowchart LR
 ### Privacidade e segurança
 
 - Tudo roda no navegador. Não há servidor nem banco de dados remoto.
-- Nenhuma requisição a terceiros: fontes e [sql.js](https://github.com/sql-js/sql.js) são servidos pelo próprio site.
-- Sem cookies, login, formulários, analytics ou anúncios.
+- Fontes, [sql.js](https://github.com/sql-js/sql.js) e o script do [GoatCounter](https://www.goatcounter.com/) são servidos pelo próprio site.
+- Sem cookies, login, formulários ou anúncios. A contagem de visitas usa o GoatCounter, que não usa cookies; o único envio para fora é esse registro de visita.
 - Content Security Policy restritiva, sem scripts embutidos no HTML.
 - Políticas de privacidade: [pt-BR](privacidade.html) · [en-US](privacy.html).
 
@@ -117,6 +117,7 @@ js/data.js          banco e casos em pt-BR
 js/data-en.js       banco e casos em en-US
 js/game.js          lógica do jogo
 vendor/sql.js/      sql.js 1.13.0 (build asm.js)
+vendor/goatcounter/ count.js do GoatCounter (contagem de visitas)
 fonts/              Special Elite, Courier Prime, Work Sans
 docs/img/           imagens deste README
 _headers            cabeçalhos para Cloudflare Pages / Netlify
@@ -146,6 +147,7 @@ A resposta é aceita quando o resultado bate com o de `solucao`: mesmas colunas,
 ### Créditos de terceiros
 
 - [sql.js](https://github.com/sql-js/sql.js): licença MIT
+- [GoatCounter count.js](https://github.com/arp242/goatcounter): licença ISC
 - [Special Elite](https://fonts.google.com/specimen/Special+Elite): Apache 2.0
 - [Courier Prime](https://fonts.google.com/specimen/Courier+Prime) e [Work Sans](https://fonts.google.com/specimen/Work+Sans): SIL Open Font License 1.1
 
@@ -177,7 +179,7 @@ The game takes you from your first `SELECT *` all the way to CTEs and window fun
 
 - Fully translated: in the English version, the database itself (tables, columns and values) is in English too.
 - Answers are graded by their result, so any correct query passes.
-- Runs entirely in the browser: no server, no cookies, no sign-up, no third-party requests.
+- Runs entirely in the browser: no server, no cookies, no sign-up. Visits are counted with cookie-free GoatCounter.
 - Progress saved locally and shared across both languages.
 
 ### Run locally

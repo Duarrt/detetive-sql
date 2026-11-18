@@ -126,6 +126,7 @@ function check() {
   if (!same) return say('bad', c.ordem && sameSet ? T.wrongOrder : `${mock}<br>${T.wrongContent}`);
   const first = st.done[st.cur] === undefined;
   if (first) st.done[st.cur] = value();
+  if (first) { try { if (window.goatcounter && goatcounter.count) goatcounter.count({path: `caso-${String(st.cur+1).padStart(2,'0')}-resolvido-${lang}`, title: c.titulo, event: true}); } catch(e) {} }
   save();
   say('good', `${T.correct}${first ? '+' + st.done[st.cur] + ' XP. ' : ''}${esc(c.fim)}`);
   $('stamp').className = 'stamp show';
