@@ -51,7 +51,7 @@
     </section>
     <section class="term">
       <label for="sql" data-i18n="termLabel">Terminal de interrogatório — Ctrl+Enter para executar</label>
-      <textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <div class="editor"><pre class="hl" aria-hidden="true"><code id="sqlHl"></code></pre><textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea></div>
       <div class="row">
         <button class="run" id="runBtn" data-i18n="runBtn">Interrogar o banco</button>
         <button class="sec" id="checkBtn" data-i18n="checkBtn">Entregar ao delegado</button>
@@ -71,6 +71,7 @@
 <script src="js/data-en.js"></script>
 <script src="js/data-s1.js"></script>
 <script src="js/data-s1-en.js"></script>
+<script src="js/editor.js"></script>
 <script src="vendor/sql.js/sql-asm.js"></script>
 <script src="js/game.js"></script>
 <script data-goatcounter="https://duarrt.goatcounter.com/count" async src="vendor/goatcounter/count.js"></script>

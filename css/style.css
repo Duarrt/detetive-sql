@@ -52,7 +52,14 @@ button:focus-visible,textarea:focus-visible,.tab:focus-visible{outline:3px solid
 @keyframes thump{0%{transform:rotate(-12deg) scale(2.4);opacity:0}70%{transform:rotate(-12deg) scale(.95)}100%{transform:rotate(-12deg) scale(1)}}
 .term{background:var(--term);color:var(--termink);border-radius:8px;padding:16px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
 .term label{font:13px 'Courier Prime',monospace;color:#c6b38b;display:block;margin-bottom:6px}
-textarea{width:100%;min-height:170px;resize:vertical;background:#140e0a;color:#fff7e3;border:1px solid #5a4636;border-radius:6px;padding:12px;font-size:16px;line-height:1.45;tab-size:2}
+.editor{position:relative;background:#140e0a;border-radius:6px}
+.editor textarea,.editor .hl{font:16px/1.45 'Courier Prime','Courier New',monospace;padding:12px;border:1px solid #5a4636;border-radius:6px;tab-size:2;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;letter-spacing:0;scrollbar-gutter:stable;margin:0}
+.editor textarea{position:relative;display:block;width:100%;min-height:170px;resize:vertical;background:transparent;color:transparent;caret-color:#fff7e3;overflow:auto}
+.editor textarea::selection{background:rgba(255,210,122,.35);color:transparent}
+.editor textarea::placeholder{color:#8d7558}
+.editor .hl{position:absolute;inset:0;overflow:hidden;color:#fff7e3;border-color:transparent;pointer-events:none}
+.kw{color:#ffb86b;font-weight:700}.fn{color:#7fd1ff}.str{color:#a8e6a1}.num{color:#f7a8b8}.cmt{color:#9c8868;font-style:italic}
+.hint pre .kw{color:#a4400f}.hint pre .fn{color:#1d6fa5}.hint pre .str{color:#2f7a4b}.hint pre .num{color:#9b2c5c}.hint pre .cmt{color:#6b5541}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .run{background:var(--red);color:#fff;padding:0 22px}
 .sec{background:#3a2c22;color:var(--termink);border-color:#5a4636;padding:0 14px}

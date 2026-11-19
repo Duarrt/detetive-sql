@@ -37,6 +37,8 @@ function pickLang() {
 }
 let lang = pickLang(), T = window.I18N[lang];
 let SQL = null, db = null, last = null, dbFor = '';
+const paintSql = window.SqlEditor ? SqlEditor.attach($('sql'), $('sqlHl')) : () => {};
+const hl = src => window.SqlEditor ? SqlEditor.highlight(src) : esc(src);
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ch = () => st.cur.ch;
@@ -98,10 +100,10 @@ function renderCase() {
   $('title').textContent = c.titulo;
   $('story').innerHTML = c.historia;
   $('concept').innerHTML = c.conceito;
-  $('example').textContent = c.exemplo;
+  $('example').innerHTML = hl(c.exemplo);
   $('goal').textContent = T.goal + c.objetivo;
   $('stamp').className = 'stamp' + (P().done[st.cur.i]!==undefined ? ' show' : '');
-  $('sql').value = st.drafts[draftKey(st.cur.i)] ?? '';
+  $('sql').value = st.drafts[draftKey(st.cur.i)] ?? ''; paintSql();
   $('verdict').innerHTML = P().done[st.cur.i]!==undefined ? `<div class="verdict good">${T.solved(P().done[st.cur.i])}${esc(c.fim)}</div>` : '';
   $('result').innerHTML = ''; last = null;
   ensureDb();
@@ -110,7 +112,7 @@ function renderCase() {
 function renderHints() {
   const c = C()[st.cur.i], n = P().hints[st.cur.i] || 0;
   let h = c.dicas.slice(0, Math.min(n, c.dicas.length)).map((d,i) => `<div class="hint">${T.hint(i+1)}${esc(d)}</div>`).join('');
-  if (n > c.dicas.length) h += `<div class="hint"><b>${T.solution}</b><br><pre>${esc(c.solucao)}</pre></div>`;
+  if (n > c.dicas.length) h += `<div class="hint"><b>${T.solution}</b><br><pre>${hl(c.solucao)}</pre></div>`;
   $('hintBox').innerHTML = h;
   $('hintBtn').disabled = n >= c.dicas.length;
   $('hintBtn').style.opacity = n >= c.dicas.length ? .4 : 1;
@@ -232,15 +234,15 @@ $('verdict').addEventListener('click', e => { if (e.target.id === 'openS1') { st
 $('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b) go(+b.dataset.i); });
 $('runBtn').addEventListener('click', () => { $('verdict').innerHTML = ''; run(); });
 $('checkBtn').addEventListener('click', check);
-$('clearBtn').addEventListener('click', () => { $('sql').value = ''; $('result').innerHTML = ''; $('verdict').innerHTML = ''; $('sql').focus(); });
+$('clearBtn').addEventListener('click', () => { $('sql').value = ''; paintSql(); $('result').innerHTML = ''; $('verdict').innerHTML = ''; $('sql').focus(); });
 $('sql').addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); $('verdict').innerHTML = ''; run(); }
-  if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); }
+  if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); const t = e.target, s = t.selectionStart; t.setRangeText('  ', s, t.selectionEnd, 'end'); paintSql(); }
 });
 $('sql').addEventListener('input', () => { st.drafts[draftKey(st.cur.i)] = $('sql').value; save(); });
 $('hintBtn').addEventListener('click', () => { P().hints[st.cur.i] = (P().hints[st.cur.i]||0) + 1; save(); renderHints(); });
 $('solBtn').addEventListener('click', () => { P().hints[st.cur.i] = C()[st.cur.i].dicas.length + 1; save(); renderHints(); });
-$('schema').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) { $('sql').value = `SELECT * FROM ${b.dataset.t} LIMIT 10;`; $('verdict').innerHTML=''; run(); } });
+$('schema').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) { $('sql').value = `SELECT * FROM ${b.dataset.t} LIMIT 10;`; paintSql(); $('verdict').innerHTML=''; run(); } });
 $('mNext').addEventListener('click', () => {
   $('modal').classList.remove('open');
   if ($('mNext').dataset.go === 's1') setChapter('s1'); else go(st.cur.i + 1);
