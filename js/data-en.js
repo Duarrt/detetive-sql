@@ -112,8 +112,8 @@ window.CASES_EN = [
 
 {fase:1, faseNome:'Fundamentals', titulo:'Crime wave in New Village',
  historia:`The New Village building manager swears there's an "organized gang" operating in the area. So far they've taken a fern and a wi-fi signal. The gang, if it exists, has interesting priorities.\n\nI want only the <b>thefts</b> in <b>New Village</b>. No noise complaints, no other neighborhoods.`,
- conceito:`<b>WHERE</b> filters rows. Text goes in single quotes. Use <b>AND</b> when both conditions must be true and <b>OR</b> when one is enough.`,
- exemplo:`SELECT * FROM cars\nWHERE color = 'red' AND model = 'Golf';`,
+ conceito:`<b>WHERE</b> filters rows. Text goes in single quotes. Use <b>AND</b> when both conditions must be true and <b>OR</b> when one is enough.<br><br>To compare one column against several values, <b>IN</b> is a shortcut for several ORs: <code>color IN ('red', 'silver')</code> is the same as <code>color = 'red' OR color = 'silver'</code>. And <b>NOT IN</b> does the opposite: it keeps everything that is <i>not</i> in the list.`,
+ exemplo:`SELECT * FROM cars\nWHERE color = 'red' AND model = 'Golf';\n\n-- IN and NOT IN:\nSELECT * FROM cars WHERE color IN ('red', 'silver');\nSELECT * FROM cars WHERE color NOT IN ('red', 'silver');`,
  objetivo:'List every column of the incidents of type theft in the New Village neighborhood.',
  dicas:['Table: incidents. Columns to filter: type and neighborhood.',`WHERE type = 'theft' AND neighborhood = ...`],
  solucao:`SELECT * FROM incidents\nWHERE type = 'theft' AND neighborhood = 'New Village';`, ordem:false,
@@ -121,8 +121,8 @@ window.CASES_EN = [
 
 {fase:1, faseNome:'Fundamentals', titulo:'The witness with binoculars',
  historia:`Mrs. Lúcia, our most dedicated (and only) witness, saw someone spray-painting the wall. According to her: "the name started with <b>Ma</b>, and they were no spring chicken — <b>over 40</b>, for sure". How does she know the name of someone seen from behind, at night? Don't ask. Never ask.\n\nI want the list from oldest to youngest.`,
- conceito:`<b>LIKE</b> matches patterns: <code>%</code> means "anything". <code>'Ma%'</code> = starts with Ma. Numbers compare with <code>&gt; &lt; &gt;= &lt;=</code>. <b>ORDER BY</b> sorts; <b>DESC</b> goes from largest to smallest.`,
- exemplo:`SELECT name, age FROM residents\nWHERE name LIKE '%a'\nORDER BY age DESC;`,
+ conceito:`<b>LIKE</b> matches patterns: <code>%</code> means "anything". <code>'Ma%'</code> = starts with Ma. Numbers compare with <code>&gt; &lt; &gt;= &lt;=</code>. <b>ORDER BY</b> sorts; <b>DESC</b> goes from largest to smallest.<br><br>Two more shortcuts: <b>BETWEEN</b> takes a range including both ends (<code>age BETWEEN 30 AND 40</code> is the same as <code>age &gt;= 30 AND age &lt;= 40</code>), and <b>LIMIT</b> keeps only the first rows. Combined with ORDER BY, it becomes a "top N".`,
+ exemplo:`SELECT name, age FROM residents\nWHERE name LIKE '%a'\nORDER BY age DESC;\n\n-- the 3 oldest between 30 and 60:\nSELECT name, age FROM residents\nWHERE age BETWEEN 30 AND 60\nORDER BY age DESC\nLIMIT 3;`,
  objetivo:'Show name and age of residents whose name starts with "Ma" and who are over 40, from oldest to youngest.',
  dicas:[`name LIKE 'Ma%' AND age > 40`,'Finish with ORDER BY age DESC.'],
  solucao:`SELECT name, age FROM residents\nWHERE name LIKE 'Ma%' AND age > 40\nORDER BY age DESC;`, ordem:true,
@@ -130,8 +130,8 @@ window.CASES_EN = [
 
 {fase:2, faseNome:'Aggregation', titulo:'Statistics for the mayor',
  historia:`The mayor wants a chart for his meeting. He can't read charts, but he likes holding colorful paper. I need to know <b>how many incidents</b> we have of <b>each type</b>.`,
- conceito:`<b>COUNT(*)</b> counts rows. <b>GROUP BY</b> splits rows into groups and applies the count to each group. Give columns nice names with <b>AS</b>.`,
- exemplo:`SELECT color, COUNT(*) AS qty\nFROM cars\nGROUP BY color;`,
+ conceito:`<b>COUNT(*)</b> counts rows. <b>GROUP BY</b> splits rows into groups and applies the count to each group. Give columns nice names with <b>AS</b>.<br><br>COUNT is one of the <b>aggregate functions</b>. The other everyday ones: <b>SUM</b> (total), <b>AVG</b> (average), <b>MIN</b> (smallest value) and <b>MAX</b> (largest value). They all work with or without GROUP BY.`,
+ exemplo:`SELECT color, COUNT(*) AS qty\nFROM cars\nGROUP BY color;\n\n-- other aggregates:\nSELECT MIN(age) AS youngest, MAX(age) AS oldest,\n       AVG(age) AS average\nFROM residents;`,
  objetivo:'For each incident type, show the type and how many there are (2 columns).',
  dicas:['Group by the type column of the incidents table.','SELECT type, COUNT(*) FROM incidents GROUP BY ...'],
  solucao:`SELECT type, COUNT(*) AS qty\nFROM incidents\nGROUP BY type;`, ordem:false,
@@ -166,7 +166,7 @@ window.CASES_EN = [
 
 {fase:3, faseNome:'JOINs', titulo:'The thief on foot',
  historia:`The camera caught the exercise-bike thief leaving <b>on foot</b>, carrying the bike on their back. Detail: they were sweaty. Probably the only workout that bike ever got.\n\nI want the <b>names of everyone who doesn't own a car</b>.`,
- conceito:`<b>LEFT JOIN</b> keeps <i>every</i> row from the left table, even with no match on the right. When there's no match, the right-side columns come back <b>NULL</b>. Filtering on <code>IS NULL</code> finds who "doesn't have" something.`,
+ conceito:`<b>LEFT JOIN</b> keeps <i>every</i> row from the left table, even with no match on the right. When there's no match, the right-side columns come back <b>NULL</b>. Filtering on <code>IS NULL</code> finds who "doesn't have" something. The opposite is <code>IS NOT NULL</code>.<br><br>Careful: never use <code>= NULL</code>. NULL means "unknown", and nothing equals unknown, not even NULL itself.`,
  exemplo:`SELECT r.name\nFROM residents r\nLEFT JOIN bakery b ON b.resident_id = r.id\nWHERE b.id IS NULL;`,
  objetivo:'List the names of residents who don\'t own any car.',
  dicas:['FROM residents r LEFT JOIN cars c ON c.resident_id = r.id','WHERE c.plate IS NULL (never use = NULL, it never works)'],
@@ -175,8 +175,8 @@ window.CASES_EN = [
 
 {fase:4, faseNome:'Subqueries and CASE', titulo:'Above average',
  historia:`Official precinct policy: I only get up from my chair for cases with <b>damage above average</b>. The chair is comfortable. The average is the average across all incidents.`,
- conceito:`A <b>subquery</b> is a SELECT inside another one, in parentheses. It runs first, and its result becomes a value you can compare against. <b>AVG()</b> computes the average.`,
- exemplo:`SELECT name, age FROM residents\nWHERE age > (SELECT AVG(age) FROM residents);`,
+ conceito:`A <b>subquery</b> is a SELECT inside another one, in parentheses. It runs first, and its result becomes a value you can compare against. <b>AVG()</b> computes the average.<br><br>A subquery can also return a <i>list</i> and be used with <b>IN</b> or <b>NOT IN</b>: <code>WHERE id NOT IN (SELECT resident_id FROM cars)</code> finds who has no car, just like the LEFT JOIN in the previous case.`,
+ exemplo:`SELECT name, age FROM residents\nWHERE age > (SELECT AVG(age) FROM residents);\n\n-- a subquery that returns a list:\nSELECT name FROM residents\nWHERE id NOT IN (SELECT resident_id FROM cars);`,
  objetivo:'Show id and description of the incidents whose damage is above the average damage of all incidents.',
  dicas:['The average comes from (SELECT AVG(damage) FROM incidents).','WHERE damage > (SELECT AVG(damage) FROM incidents)'],
  solucao:`SELECT id, description FROM incidents\nWHERE damage > (SELECT AVG(damage) FROM incidents);`, ordem:false,

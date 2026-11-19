@@ -112,8 +112,8 @@ window.CASES = [
 
 {fase:1, faseNome:'Fundamentos', titulo:'Onda de furtos na Vila Nova',
  historia:`A síndica da Vila Nova jura que existe uma "quadrilha organizada" agindo no bairro. Até agora levaram uma samambaia e um sinal de wi-fi. A quadrilha, se existir, tem prioridades curiosas.\n\nQuero ver só os <b>furtos</b> da <b>Vila Nova</b>. Nada de barulho, nada de outro bairro.`,
- conceito:`<b>WHERE</b> filtra linhas. Texto vai entre aspas simples. Use <b>AND</b> quando as duas condições precisam ser verdadeiras e <b>OR</b> quando basta uma.`,
- exemplo:`SELECT * FROM carros\nWHERE cor = 'vermelho' AND modelo = 'Gol';`,
+ conceito:`<b>WHERE</b> filtra linhas. Texto vai entre aspas simples. Use <b>AND</b> quando as duas condições precisam ser verdadeiras e <b>OR</b> quando basta uma.<br><br>Para comparar a mesma coluna com vários valores, <b>IN</b> é um atalho para vários OR: <code>cor IN ('vermelho', 'prata')</code> é o mesmo que <code>cor = 'vermelho' OR cor = 'prata'</code>. E <b>NOT IN</b> faz o contrário: pega tudo que <i>não</i> está na lista.`,
+ exemplo:`SELECT * FROM carros\nWHERE cor = 'vermelho' AND modelo = 'Gol';\n\n-- IN e NOT IN:\nSELECT * FROM carros WHERE cor IN ('vermelho', 'prata');\nSELECT * FROM carros WHERE cor NOT IN ('vermelho', 'prata');`,
  objetivo:'Liste todas as colunas das ocorrências do tipo furto no bairro Vila Nova.',
  dicas:['Tabela: ocorrencias. Colunas para filtrar: tipo e bairro.',`WHERE tipo = 'furto' AND bairro = ...`],
  solucao:`SELECT * FROM ocorrencias\nWHERE tipo = 'furto' AND bairro = 'Vila Nova';`, ordem:false,
@@ -121,8 +121,8 @@ window.CASES = [
 
 {fase:1, faseNome:'Fundamentos', titulo:'A testemunha de binóculo',
  historia:`Dona Lúcia, nossa testemunha mais dedicada (e única), viu alguém pichando o muro. Segundo ela: "o nome começava com <b>Ma</b>, e já não era nenhum mocinho — passava dos <b>40</b>, com certeza". Como ela sabe o nome de alguém de costas, de noite? Não pergunte. Nunca pergunte.\n\nQuero a lista do mais velho para o mais novo.`,
- conceito:`<b>LIKE</b> compara padrões: <code>%</code> significa "qualquer coisa". <code>'Ma%'</code> = começa com Ma. Números comparam com <code>&gt; &lt; &gt;= &lt;=</code>. <b>ORDER BY</b> ordena; <b>DESC</b> é do maior para o menor.`,
- exemplo:`SELECT nome, idade FROM moradores\nWHERE nome LIKE '%a' \nORDER BY idade DESC;`,
+ conceito:`<b>LIKE</b> compara padrões: <code>%</code> significa "qualquer coisa". <code>'Ma%'</code> = começa com Ma. Números comparam com <code>&gt; &lt; &gt;= &lt;=</code>. <b>ORDER BY</b> ordena; <b>DESC</b> é do maior para o menor.<br><br>Mais dois atalhos: <b>BETWEEN</b> pega um intervalo incluindo as pontas (<code>idade BETWEEN 30 AND 40</code> é o mesmo que <code>idade &gt;= 30 AND idade &lt;= 40</code>), e <b>LIMIT</b> corta o resultado nas primeiras linhas. Com ORDER BY, vira um "top N".`,
+ exemplo:`SELECT nome, idade FROM moradores\nWHERE nome LIKE '%a' \nORDER BY idade DESC;\n\n-- os 3 mais velhos entre 30 e 60 anos:\nSELECT nome, idade FROM moradores\nWHERE idade BETWEEN 30 AND 60\nORDER BY idade DESC\nLIMIT 3;`,
  objetivo:'Mostre nome e idade dos moradores cujo nome começa com "Ma" e com mais de 40 anos, do mais velho para o mais novo.',
  dicas:[`nome LIKE 'Ma%' AND idade > 40`,'Termine com ORDER BY idade DESC.'],
  solucao:`SELECT nome, idade FROM moradores\nWHERE nome LIKE 'Ma%' AND idade > 40\nORDER BY idade DESC;`, ordem:true,
@@ -130,8 +130,8 @@ window.CASES = [
 
 {fase:2, faseNome:'Agregação', titulo:'Estatística para o prefeito',
  historia:`O prefeito quer um gráfico para a reunião. Ele não lê gráficos, mas gosta de segurar papéis coloridos. Preciso saber <b>quantas ocorrências</b> temos de <b>cada tipo</b>.`,
- conceito:`<b>COUNT(*)</b> conta linhas. <b>GROUP BY</b> junta as linhas em grupos e aplica a contagem para cada grupo. Dê nomes bonitos com <b>AS</b>.`,
- exemplo:`SELECT cor, COUNT(*) AS qtd\nFROM carros\nGROUP BY cor;`,
+ conceito:`<b>COUNT(*)</b> conta linhas. <b>GROUP BY</b> junta as linhas em grupos e aplica a contagem para cada grupo. Dê nomes bonitos com <b>AS</b>.<br><br>COUNT é uma das <b>funções de agregação</b>. As outras do dia a dia: <b>SUM</b> (soma), <b>AVG</b> (média), <b>MIN</b> (menor valor) e <b>MAX</b> (maior valor). Todas funcionam com ou sem GROUP BY.`,
+ exemplo:`SELECT cor, COUNT(*) AS qtd\nFROM carros\nGROUP BY cor;\n\n-- outras agregações:\nSELECT MIN(idade) AS mais_novo, MAX(idade) AS mais_velho,\n       AVG(idade) AS media\nFROM moradores;`,
  objetivo:'Para cada tipo de ocorrência, mostre o tipo e a quantidade (2 colunas).',
  dicas:['Agrupe pela coluna tipo da tabela ocorrencias.','SELECT tipo, COUNT(*) FROM ocorrencias GROUP BY ...'],
  solucao:`SELECT tipo, COUNT(*) AS qtd\nFROM ocorrencias\nGROUP BY tipo;`, ordem:false,
@@ -166,7 +166,7 @@ window.CASES = [
 
 {fase:3, faseNome:'JOINs', titulo:'O ladrão a pé',
  historia:`A câmera mostrou o ladrão da bicicleta ergométrica saindo <b>a pé</b>, carregando a bicicleta nas costas. Detalhe: ele estava suado. Provavelmente o único uso que aquela bicicleta já teve.\n\nQuero os <b>nomes de quem não tem carro</b>.`,
- conceito:`<b>LEFT JOIN</b> mantém <i>todas</i> as linhas da tabela da esquerda, mesmo sem par na direita. Quando não há par, as colunas da direita vêm <b>NULL</b>. Filtrar <code>IS NULL</code> encontra quem "não tem".`,
+ conceito:`<b>LEFT JOIN</b> mantém <i>todas</i> as linhas da tabela da esquerda, mesmo sem par na direita. Quando não há par, as colunas da direita vêm <b>NULL</b>. Filtrar <code>IS NULL</code> encontra quem "não tem". O contrário é <code>IS NOT NULL</code>.<br><br>Atenção: nunca use <code>= NULL</code>. NULL significa "desconhecido", e nada é igual a desconhecido, nem o próprio NULL.`,
  exemplo:`SELECT m.nome\nFROM moradores m\nLEFT JOIN padaria p ON p.morador_id = m.id\nWHERE p.id IS NULL;`,
  objetivo:'Liste o nome dos moradores que não têm nenhum carro.',
  dicas:['FROM moradores m LEFT JOIN carros c ON c.morador_id = m.id','WHERE c.placa IS NULL (não use = NULL, nunca funciona)'],
@@ -175,8 +175,8 @@ window.CASES = [
 
 {fase:4, faseNome:'Subconsultas e CASE', titulo:'Acima da média',
  historia:`Política oficial da delegacia: eu só levanto da cadeira para casos com <b>prejuízo acima da média</b>. A cadeira é confortável. A média é a média de todas as ocorrências.`,
- conceito:`Uma <b>subconsulta</b> é um SELECT dentro de outro, entre parênteses. Ela roda primeiro e o resultado vira um valor que você usa na comparação. <b>AVG()</b> calcula a média.`,
- exemplo:`SELECT nome, idade FROM moradores\nWHERE idade > (SELECT AVG(idade) FROM moradores);`,
+ conceito:`Uma <b>subconsulta</b> é um SELECT dentro de outro, entre parênteses. Ela roda primeiro e o resultado vira um valor que você usa na comparação. <b>AVG()</b> calcula a média.<br><br>A subconsulta também pode devolver uma <i>lista</i> e ser usada com <b>IN</b> ou <b>NOT IN</b>: <code>WHERE id NOT IN (SELECT morador_id FROM carros)</code> acha quem não tem carro, igual ao LEFT JOIN do caso anterior.`,
+ exemplo:`SELECT nome, idade FROM moradores\nWHERE idade > (SELECT AVG(idade) FROM moradores);\n\n-- subconsulta que devolve uma lista:\nSELECT nome FROM moradores\nWHERE id NOT IN (SELECT morador_id FROM carros);`,
  objetivo:'Mostre id e descricao das ocorrências com prejuizo acima da média de prejuízo de todas as ocorrências.',
  dicas:['A média vem de (SELECT AVG(prejuizo) FROM ocorrencias).','WHERE prejuizo > (SELECT AVG(prejuizo) FROM ocorrencias)'],
  solucao:`SELECT id, descricao FROM ocorrencias\nWHERE prejuizo > (SELECT AVG(prejuizo) FROM ocorrencias);`, ordem:false,

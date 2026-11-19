@@ -104,7 +104,7 @@ window.CASES_S1 = [
 
 {titulo:'O número sem dono',
  historia:`O convite veio de um número que eu não conheço, e eu conheço todo mundo. A tabela <b>telefones</b> diz de quem é cada número da vila. Quero a lista dos números que mandaram mensagem para o delegado e <b>não têm dono</b> cadastrado. Sem repetir número.`,
- conceito:`<b>DISTINCT</b> remove linhas repetidas do resultado. Para achar quem "não tem par" em outra tabela, o velho truque do Prólogo: <b>LEFT JOIN</b> e filtrar onde o lado da direita veio <b>NULL</b>.`,
+ conceito:`<b>DISTINCT</b> remove linhas repetidas do resultado. Para achar quem "não tem par" em outra tabela, o velho truque do Prólogo: <b>LEFT JOIN</b> e filtrar onde o lado da direita veio <b>NULL</b>.<br><br>Outro caminho que também funciona: <code>WHERE de NOT IN (SELECT numero FROM telefones)</code>. Cuidado só com um detalhe: se a subconsulta devolver algum NULL, o NOT IN não traz nada. Com LEFT JOIN + IS NULL isso não acontece.`,
  exemplo:`SELECT DISTINCT local FROM cameras;`,
  objetivo:'Liste, sem repetição, os números (coluna de) que mandaram mensagem para o 41 99999-0016 e não aparecem na tabela telefones.',
  dicas:['FROM mensagens m LEFT JOIN telefones t ON t.numero = m.de',`WHERE m.para = '41 99999-0016' AND t.numero IS NULL, com SELECT DISTINCT m.de`],
@@ -144,7 +144,7 @@ window.CASES_S1 = [
 
 {titulo:'Expediente noturno',
  historia:`O Fundo da Praça tem internet banking. A tesoureira é a professora Célia, que faz tudo em horário comercial e responde e-mail com "Prezados". Mas existe também um login genérico, "tesouraria", que qualquer um com a senha usa.\n\nQuero os acessos feitos no <b>fim de semana</b> e <b>a partir das 22:00</b>.`,
- conceito:`<b>strftime</b> extrai partes de uma data. <code>strftime('%w', data)</code> devolve o dia da semana como texto: <b>'0' é domingo</b> e <b>'6' é sábado</b>. Com <b>IN</b> você testa vários valores de uma vez. Outros formatos úteis: <code>'%Y'</code> ano, <code>'%m'</code> mês, <code>'%d'</code> dia.`,
+ conceito:`<b>strftime</b> extrai partes de uma data. <code>strftime('%w', data)</code> devolve o dia da semana como texto: <b>'0' é domingo</b> e <b>'6' é sábado</b>. Com <b>IN</b> você testa vários valores de uma vez: <code>dia IN ('0', '6')</code> é o mesmo que <code>dia = '0' OR dia = '6'</code>. Repare que o resultado de strftime é <i>texto</i>, por isso os números vão entre aspas. Outros formatos úteis: <code>'%Y'</code> ano, <code>'%m'</code> mês, <code>'%d'</code> dia.`,
  exemplo:`SELECT data, strftime('%w', data) AS dia_semana\nFROM onibus;`,
  objetivo:'Mostre data, hora, usuario e ip dos acessos_banco feitos em sábado ou domingo, com hora a partir de 22:00.',
  dicas:[`strftime('%w', data) IN ('0', '6')`,`... AND hora >= '22:00'`],
@@ -154,7 +154,7 @@ window.CASES_S1 = [
 
 {titulo:'Mesma rede',
  historia:`O IP 177.10.0.45 é de um roteador da Vila Nova. A operadora mandou os registros de quem conectou nele (tabela <b>conexoes_wifi</b>). Quero quem estava conectado <b>nas três datas</b> dos pagamentos: <b>2026-09-20</b>, <b>2026-10-04</b> e <b>2026-10-18</b>. Cuidado: tem gente que conectou várias vezes no mesmo dia.`,
- conceito:`<b>IN ('a', 'b', 'c')</b> filtra por uma lista de valores. <b>COUNT(DISTINCT coluna)</b> conta só os valores diferentes: três conexões no mesmo dia contam como <i>uma</i> data. Combinado com <b>HAVING</b>, responde "quem aparece em todas as datas".`,
+ conceito:`<b>IN ('a', 'b', 'c')</b> filtra por uma lista de valores, sem escrever três OR. <b>COUNT(DISTINCT coluna)</b> conta só os valores diferentes: três conexões no mesmo dia contam como <i>uma</i> data. Combinado com <b>HAVING</b>, responde "quem aparece em todas as datas".`,
  exemplo:`SELECT morador_id, COUNT(DISTINCT data) AS dias\nFROM padaria\nGROUP BY morador_id\nHAVING COUNT(DISTINCT data) >= 5;`,
  objetivo:'Mostre o nome de quem esteve conectado ao IP 177.10.0.45 em todas as três datas (2026-09-20, 2026-10-04 e 2026-10-18).',
  dicas:[`JOIN moradores e WHERE w.ip = '177.10.0.45' AND w.data IN ('2026-09-20', '2026-10-04', '2026-10-18')`,'GROUP BY m.id HAVING COUNT(DISTINCT w.data) = 3'],

@@ -104,7 +104,7 @@ window.CASES_S1_EN = [
 
 {titulo:'The number with no owner',
  historia:`The invitation came from a number I don't know, and I know everybody. The <b>phones</b> table says who owns each number in town. I want the numbers that messaged the chief and have <b>no registered owner</b>. No repeats.`,
- conceito:`<b>DISTINCT</b> removes duplicate rows from the result. To find who "has no match" in another table, use the old Prologue trick: <b>LEFT JOIN</b> and keep the rows where the right side came back <b>NULL</b>.`,
+ conceito:`<b>DISTINCT</b> removes duplicate rows from the result. To find who "has no match" in another table, use the old Prologue trick: <b>LEFT JOIN</b> and keep the rows where the right side came back <b>NULL</b>.<br><br>Another way that also works: <code>WHERE sender NOT IN (SELECT number FROM phones)</code>. Just one catch: if the subquery returns any NULL, NOT IN returns nothing at all. LEFT JOIN + IS NULL doesn't have that problem.`,
  exemplo:`SELECT DISTINCT location FROM cameras;`,
  objetivo:'List, without repeats, the numbers (sender column) that messaged 41 99999-0016 and do not appear in the phones table.',
  dicas:['FROM messages m LEFT JOIN phones p ON p.number = m.sender',`WHERE m.recipient = '41 99999-0016' AND p.number IS NULL, with SELECT DISTINCT m.sender`],
@@ -144,7 +144,7 @@ window.CASES_S1_EN = [
 
 {titulo:'Night shift',
  historia:`The Plaza Fund has online banking. The treasurer is Célia, the teacher, who does everything during business hours and opens every email with "Dear all". But there's also a generic login, "treasury", that anyone with the password can use.\n\nI want the logins made on a <b>weekend</b> and <b>from 22:00 on</b>.`,
- conceito:`<b>strftime</b> extracts parts of a date. <code>strftime('%w', date)</code> returns the day of the week as text: <b>'0' is Sunday</b> and <b>'6' is Saturday</b>. With <b>IN</b> you test several values at once. Other useful formats: <code>'%Y'</code> year, <code>'%m'</code> month, <code>'%d'</code> day.`,
+ conceito:`<b>strftime</b> extracts parts of a date. <code>strftime('%w', date)</code> returns the day of the week as text: <b>'0' is Sunday</b> and <b>'6' is Saturday</b>. With <b>IN</b> you test several values at once: <code>day IN ('0', '6')</code> is the same as <code>day = '0' OR day = '6'</code>. Note that strftime returns <i>text</i>, which is why the numbers go in quotes. Other useful formats: <code>'%Y'</code> year, <code>'%m'</code> month, <code>'%d'</code> day.`,
  exemplo:`SELECT date, strftime('%w', date) AS weekday\nFROM buses;`,
  objetivo:'Show date, time, username and ip of the bank_logins made on Saturday or Sunday, with time from 22:00 on.',
  dicas:[`strftime('%w', date) IN ('0', '6')`,`... AND time >= '22:00'`],
@@ -154,7 +154,7 @@ window.CASES_S1_EN = [
 
 {titulo:'Same network',
  historia:`IP 177.10.0.45 belongs to a router in New Village. The provider sent the records of who connected to it (table <b>wifi_logs</b>). I want whoever was connected <b>on all three payment dates</b>: <b>2026-09-20</b>, <b>2026-10-04</b> and <b>2026-10-18</b>. Careful: some people connected several times on the same day.`,
- conceito:`<b>IN ('a', 'b', 'c')</b> filters by a list of values. <b>COUNT(DISTINCT column)</b> counts only different values: three connections on the same day count as <i>one</i> date. Combined with <b>HAVING</b>, it answers "who shows up on every date".`,
+ conceito:`<b>IN ('a', 'b', 'c')</b> filters by a list of values, without writing three ORs. <b>COUNT(DISTINCT column)</b> counts only different values: three connections on the same day count as <i>one</i> date. Combined with <b>HAVING</b>, it answers "who shows up on every date".`,
  exemplo:`SELECT resident_id, COUNT(DISTINCT date) AS days\nFROM bakery\nGROUP BY resident_id\nHAVING COUNT(DISTINCT date) >= 5;`,
  objetivo:'Show the name of whoever was connected to IP 177.10.0.45 on all three dates (2026-09-20, 2026-10-04 and 2026-10-18).',
  dicas:[`JOIN residents and WHERE w.ip = '177.10.0.45' AND w.date IN ('2026-09-20', '2026-10-04', '2026-10-18')`,'GROUP BY r.id HAVING COUNT(DISTINCT w.date) = 3'],
