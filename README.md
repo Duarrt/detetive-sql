@@ -11,7 +11,7 @@
 ![SQLite no navegador](https://img.shields.io/badge/SQLite-no_navegador-4a3426?style=flat-square&logo=sqlite&logoColor=white)
 ![Sem cookies](https://img.shields.io/badge/cookies-zero-4a3426?style=flat-square)
 ![Sem cadastro](https://img.shields.io/badge/cadastro-não_precisa-4a3426?style=flat-square)
-![13 casos](https://img.shields.io/badge/casos-13-4a3426?style=flat-square)
+![21 casos](https://img.shields.io/badge/casos-13_%2B_8-4a3426?style=flat-square)
 
 [Português](#português) · [English](#english)
 
@@ -27,7 +27,7 @@
 
 Você é a nova detetive da **Divisão de Pequenos Delitos** da Vila Pacata, onde o crime é pequeno, mas o drama é gigante. O sarcástico **Delegado Bastos** te passa os casos: um iogurte sumido da geladeira, uma vaquinha de churrasco que não fecha a conta, um troféu de truco desaparecido. Para resolver cada um, você interroga o banco de dados da vila com SQL.
 
-O jogo vai do primeiro `SELECT *` até CTEs e funções de janela, sem precisar instalar nada.
+O jogo vai do primeiro `SELECT *` até CTEs recursivas, sem precisar instalar nada. Começa com um **Prólogo** de 13 casos que ensina o básico e continua na **Temporada 1: O Sumiço do Delegado**, uma investigação em 8 casos interligados.
 
 ### Como jogar
 
@@ -44,9 +44,9 @@ O jogo vai do primeiro `SELECT *` até CTEs e funções de janela, sem precisar 
 | 2 dicas | 40 |
 | Solução | 10 |
 
-O XP leva às patentes: *Estagiária do Arquivo Morto → Detetive Júnior → Investigadora → Inspetora → Delegada-Chefe*.
+Na Temporada 1 cada caso vale 150 XP. O XP leva às patentes: *Estagiária do Arquivo Morto → Detetive Júnior → Investigadora → Inspetora → Delegada-Chefe → Lenda da Vila Pacata*.
 
-### Os casos
+### Prólogo
 
 ```mermaid
 flowchart LR
@@ -68,6 +68,21 @@ flowchart LR
 | 11 | Classificação de gravidade | `CASE WHEN` |
 | 12 | O rei da padaria | `WITH` (CTE), `RANK() OVER` |
 | 13 | Caso final | Tudo junto |
+
+### Temporada 1: O Sumiço do Delegado
+
+Numa segunda-feira, o Delegado Bastos não aparece. Quem narra agora é a Dona Lúcia, assistente voluntária não remunerada, e cada caso resolvido vira uma pista num quadro que leva ao culpado. A temporada abre quando o Prólogo termina, ou na hora, pelo botão "Já sei SQL, liberar a temporada".
+
+| # | Caso | O que você aprende |
+|---:|---|---|
+| 1 | Segunda-feira sem café | `OR` com parênteses, datas, `ORDER BY` com duas colunas |
+| 2 | O número sem dono | `DISTINCT`, `LEFT JOIN` |
+| 3 | A conta que não fecha | `SUM(CASE WHEN …)` |
+| 4 | Serviço fantasma | `NOT EXISTS` |
+| 5 | A última viagem | `UNION ALL` |
+| 6 | Expediente noturno | `strftime`, `IN` |
+| 7 | Mesma rede | `COUNT(DISTINCT)` |
+| 8 | Caso final | `WITH RECURSIVE` |
 
 <div align="center">
 <img src="docs/img/case-closed-en.png" alt="Pop-up de caso encerrado com a fala do delegado, o XP ganho e a evidência entregue" width="560">
@@ -115,6 +130,8 @@ css/style.css       estilos e fontes locais
 js/i18n.js          textos da interface (pt-BR e en-US)
 js/data.js          banco e casos em pt-BR
 js/data-en.js       banco e casos em en-US
+js/data-s1.js       Temporada 1 em pt-BR (tabelas extras e casos)
+js/data-s1-en.js    Temporada 1 em en-US
 js/game.js          lógica do jogo
 vendor/sql.js/      sql.js 1.13.0 (build asm.js)
 vendor/goatcounter/ count.js do GoatCounter (contagem de visitas)
@@ -142,6 +159,8 @@ Cada caso é um objeto em `js/data.js`, com o equivalente em inglês na **mesma 
   fim: 'A piada do delegado quando o caso é resolvido'
 }
 ```
+
+Os casos da Temporada 1 ficam em `js/data-s1.js` e `js/data-s1-en.js`. Eles não têm `fase`/`faseNome`, mas têm `pista`, a frase que entra no quadro de pistas. O banco da temporada é o do Prólogo mais o `SEED_S1`, que acrescenta tabelas sem alterar os casos do Prólogo.
 
 A resposta é aceita quando o resultado bate com o de `solucao`: mesmas colunas, na mesma ordem, e as mesmas linhas. O progresso é guardado pela posição do caso, então mantenha as duas listas com a mesma quantidade e ordem de casos.
 
@@ -174,7 +193,7 @@ The game takes you from your first `SELECT *` all the way to CTEs and window fun
 4. When the result looks right, click **Hand it to the chief**.
 5. Stuck? Each hint costs 30 XP, and showing the solution drops the case to 10 XP.
 
-13 cases in 5 phases: fundamentals (`SELECT`, `WHERE`, `LIKE`, `ORDER BY`), aggregation (`COUNT`, `SUM`, `GROUP BY`, `HAVING`), joins (`JOIN`, `LEFT JOIN`), subqueries and `CASE`, and advanced queries (CTEs, `RANK() OVER`).
+A 13-case Prologue teaches the basics, then **Season 1: The Missing Chief** continues with 8 interlinked cases (`NOT EXISTS`, `UNION ALL`, `strftime`, `COUNT(DISTINCT)`, `WITH RECURSIVE`). Prologue topics: fundamentals (`SELECT`, `WHERE`, `LIKE`, `ORDER BY`), aggregation (`COUNT`, `SUM`, `GROUP BY`, `HAVING`), joins (`JOIN`, `LEFT JOIN`), subqueries and `CASE`, and advanced queries (CTEs, `RANK() OVER`).
 
 ### Highlights
 

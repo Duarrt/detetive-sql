@@ -32,6 +32,7 @@
       <div><div class="xpbar"><i id="xpFill"></i></div><div id="xpTxt" class="xptxt">0 XP</div></div>
     </div>
   </header>
+  <nav class="chapters" id="chapters" aria-label="Capítulos"></nav>
   <nav class="tabs" id="tabs" aria-label="Casos"></nav>
   <main class="board">
     <section class="file" aria-live="polite">
@@ -39,13 +40,14 @@
       <div class="meta"><span id="caseNo"></span><span id="phase"></span></div>
       <h2 id="title"></h2>
       <div class="chief">
-        <svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><path d="M19 25h6M29 25h6" stroke="#2a1d14" stroke-width="1.5"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg>
+        <svg class="av av-bastos" width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><path d="M19 25h6M29 25h6" stroke="#2a1d14" stroke-width="1.5"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg><svg class="av av-lucia" width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><circle cx="27" cy="12" r="7" fill="#d9d4cc"/><circle cx="27" cy="29" r="12" fill="#e8c39e"/><path d="M15 26q2-12 12-12t12 12q-3-6-12-6t-12 6z" fill="#d9d4cc"/><rect x="16" y="24" width="9" height="7" rx="3" fill="#2a1d14"/><rect x="29" y="24" width="9" height="7" rx="3" fill="#2a1d14"/><rect x="25" y="26" width="4" height="2" fill="#2a1d14"/><circle cx="20.5" cy="27.5" r="2" fill="#7fb3c9"/><circle cx="33.5" cy="27.5" r="2" fill="#7fb3c9"/><path d="M23 35q4 2 8 0" stroke="#8a4b3a" stroke-width="1.5" fill="none"/><path d="M14 46q13-9 26 0" fill="#9b4d6e"/></svg>
         <p class="story" id="story"></p>
       </div>
       <div class="lesson"><h3 data-i18n="manual">Manual do detetive</h3><div id="concept"></div><pre id="example"></pre></div>
       <div class="goal" id="goal"></div>
-      <div class="hints"><button class="ghost" id="hintBtn" data-i18n="hintBtn">Pedir dica (−30 XP)</button><button class="ghost" id="solBtn" data-i18n="solBtn">Ver solução (fica só 10 XP)</button><span class="worth" id="caseValue" aria-live="polite"></span></div>
+      <div class="hints"><button class="ghost" id="hintBtn" data-i18n="hintBtn">Pedir dica (−30 XP)</button><button class="ghost" id="solBtn">Ver solução (fica só 10 XP)</button><span class="worth" id="caseValue" aria-live="polite"></span></div>
       <div id="hintBox"></div>
+      <details class="clues" id="clues" open hidden><summary></summary><ol id="clueList"></ol></details>
     </section>
     <section class="term">
       <label for="sql" data-i18n="termLabel">Terminal de interrogatório — Ctrl+Enter para executar</label>
@@ -62,11 +64,13 @@
   </main>
   <p class="foot"><span data-i18n="foot">Todos os moradores, crimes e bigodes são fictícios. O progresso fica salvo só neste navegador.</span> <a id="privLink" href="privacidade.html" data-i18n="privacy">Privacidade</a> <button class="sec small" id="resetBtn" data-i18n="reset">Zerar progresso</button></p>
 </div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h2 id="mTitle"></h2><div class="mxp" id="mXp"></div><div class="quote"><svg width="44" height="44" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg><p id="mText"></p></div><div id="mEvid"></div><div class="row"><button class="run" id="mNext" data-i18n="next">Próximo caso</button><button class="ghost" id="mStay" data-i18n="stay">Ficar aqui</button></div></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h2 id="mTitle"></h2><div class="mxp" id="mXp"></div><div class="quote"><svg class="av av-bastos" width="44" height="44" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><rect x="11" y="9" width="32" height="10" rx="3" fill="#2a1d14"/><rect x="9" y="17" width="36" height="4" rx="2" fill="#2a1d14"/><circle cx="27" cy="30" r="12" fill="#e2b48c"/><path d="M19 35q8 5 16 0q-3 4-8 4t-8-4z" fill="#5a3a22"/><circle cx="22" cy="28" r="1.6" fill="#2a1d14"/><circle cx="32" cy="28" r="1.6" fill="#2a1d14"/><circle cx="27" cy="14" r="2.5" fill="#d9b04a"/></svg><svg class="av av-lucia" width="44" height="44" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="26" fill="#3b291e"/><circle cx="27" cy="12" r="7" fill="#d9d4cc"/><circle cx="27" cy="29" r="12" fill="#e8c39e"/><path d="M15 26q2-12 12-12t12 12q-3-6-12-6t-12 6z" fill="#d9d4cc"/><rect x="16" y="24" width="9" height="7" rx="3" fill="#2a1d14"/><rect x="29" y="24" width="9" height="7" rx="3" fill="#2a1d14"/><rect x="25" y="26" width="4" height="2" fill="#2a1d14"/><circle cx="20.5" cy="27.5" r="2" fill="#7fb3c9"/><circle cx="33.5" cy="27.5" r="2" fill="#7fb3c9"/><path d="M23 35q4 2 8 0" stroke="#8a4b3a" stroke-width="1.5" fill="none"/><path d="M14 46q13-9 26 0" fill="#9b4d6e"/></svg><p id="mText"></p></div><div id="mClue"></div><div id="mEvid"></div><div class="row"><button class="run" id="mNext" data-i18n="next">Próximo caso</button><button class="ghost" id="mStay" data-i18n="stay">Ficar aqui</button></div></div></div>
 
 <script src="js/i18n.js"></script>
 <script src="js/data.js"></script>
 <script src="js/data-en.js"></script>
+<script src="js/data-s1.js"></script>
+<script src="js/data-s1-en.js"></script>
 <script src="vendor/sql.js/sql-asm.js"></script>
 <script src="js/game.js"></script>
 <script data-goatcounter="https://duarrt.goatcounter.com/count" async src="vendor/goatcounter/count.js"></script>

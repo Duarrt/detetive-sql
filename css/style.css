@@ -112,3 +112,19 @@ details.schema summary{cursor:pointer;font:15px 'Special Elite',monospace;color:
 .top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
 .top .lang{margin-left:0;justify-self:end}
 .top .rank{grid-column:1/-1;justify-self:start;margin-left:0}
+.chapters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.chap{background:rgba(0,0,0,.25);color:var(--manila);border:2px solid var(--manila2);padding:0 14px;font:500 14px 'Work Sans',sans-serif;display:flex;align-items:center;gap:8px}
+.chap small{font:12px 'Courier Prime',monospace;opacity:.85}
+.chap.on{background:var(--manila);color:var(--ink);border-color:var(--manila)}
+.chap.lock{opacity:.6}
+.av-lucia{display:none}
+body.ch-s1 .av-bastos{display:none}
+body.ch-s1 .av-lucia{display:block}
+.clues{margin-top:16px;background:#e6cf92;border-radius:6px;padding:10px 14px;border:1px dashed var(--line)}
+.clues summary{cursor:pointer;font:17px 'Special Elite',monospace;color:var(--red);min-height:32px}
+.clues ol{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.clues li{background:var(--paper);padding:8px 10px;border-radius:4px;font-size:15px;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.clues li:nth-child(odd){transform:rotate(-.4deg)}.clues li:nth-child(even){transform:rotate(.4deg)}
+.clues li.nope{background:transparent;box-shadow:none;color:var(--muted);font-style:italic;border:1px dashed var(--line)}
+.clue-new{background:var(--paper);border-left:4px solid var(--red);padding:8px 12px;border-radius:4px;margin:0 0 12px}
+@media(prefers-reduced-motion:reduce){.clues li{transform:none!important}}
