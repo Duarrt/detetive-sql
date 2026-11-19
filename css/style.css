@@ -135,3 +135,6 @@ body.ch-s1 .av-lucia{display:block}
 .clues li.nope{background:transparent;box-shadow:none;color:var(--muted);font-style:italic;border:1px dashed var(--line)}
 .clue-new{background:var(--paper);border-left:4px solid var(--red);padding:8px 12px;border-radius:4px;margin:0 0 12px}
 @media(prefers-reduced-motion:reduce){.clues li{transform:none!important}}
+.av{border-radius:50%;flex:none}
+.faces{float:right;display:flex;gap:4px;margin:0 0 4px 8px}
+.faces img{border-radius:50%;box-shadow:0 2px 0 rgba(0,0,0,.2)}

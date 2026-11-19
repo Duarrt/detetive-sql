@@ -160,6 +160,7 @@ window.CASES_S1_EN = [
  dicas:[`JOIN residents and WHERE w.ip = '177.10.0.45' AND w.date IN ('2026-09-20', '2026-10-04', '2026-10-18')`,'GROUP BY r.id HAVING COUNT(DISTINCT w.date) = 3'],
  solucao:`SELECT r.name\nFROM wifi_logs w\nJOIN residents r ON r.id = w.resident_id\nWHERE w.ip = '177.10.0.45'\n  AND w.date IN ('2026-09-20', '2026-10-04', '2026-10-18')\nGROUP BY r.id\nHAVING COUNT(DISTINCT w.date) = 3;`, ordem:false,
  fim:'Marta Gouveia, the building manager, who owns the router. And Wagner Dias, the personal trainer, who lives upstairs and uses her wi-fi without asking. Remember the wi-fi theft in the Prologue? Exactly. Two suspects, one network, and Sandra connected three times in one day just to send flower pictures.',
+ rostos:['marta','wagner'],
  pista:'On all three nights, only two devices were on IP 177.10.0.45: building manager Marta\'s (she owns the router) and Wagner\'s (who uses her wi-fi without asking).'},
 
 {titulo:'Final case: follow the money',
@@ -170,5 +171,6 @@ window.CASES_S1_EN = [
  dicas:['WITH RECURSIVE trail(account) AS (SELECT \'7781-0\' UNION SELECT t.to_account FROM transfers t JOIN trail ON t.from_account = trail.account)','Then: JOIN accounts and residents, and WHERE NOT EXISTS (SELECT 1 FROM transfers t WHERE t.from_account = trail.account)'],
  solucao:`WITH RECURSIVE trail(account) AS (\n  SELECT '7781-0'\n  UNION\n  SELECT t.to_account\n  FROM transfers t\n  JOIN trail ON t.from_account = trail.account\n)\nSELECT r.name\nFROM trail\nJOIN accounts a ON a.account = trail.account\nJOIN residents r ON r.id = a.holder_id\nWHERE NOT EXISTS (\n  SELECT 1 FROM transfers t WHERE t.from_account = trail.account\n);`, ordem:false,
  fim:'Marta Gouveia. The building manager. The same one who, back in the Prologue, swore there was an "organized gang" in New Village: a smoke screen. The money went through Wagner\'s account; he thought they were "lesson payments", kept 10% and asked no questions (he has some explaining to do). The prepaid SIM and the fake invitation got the chief out of town before the statements arrived. We picked Bastos up at Oblivion Ridge: tanned, holding a "Police Chief of the Year" certificate printed at a copy shop, and saying only: "I knew that database would save me." Case closed. The Yogurt Case, however, remains open.',
+ rostos:['marta'],
  pista:'The money trail: 7781-0 (ghost company) → 3320-1 (Wagner, the front) → 9054-7 (savings of building manager Marta Gouveia). Case closed.'}
 ];

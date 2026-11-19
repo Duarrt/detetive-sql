@@ -82,6 +82,7 @@ function renderTabs() {
     return `<button class="${cls}" data-i="${i}" ${unlocked(i)?'':'aria-disabled="true"'} title="${esc(c.titulo)}">${label}${unlocked(i)?'':' 🔒'}</button>`;
   }).join('');
 }
+const faces = c => (c.rostos || []).length ? `<span class="faces">${c.rostos.map(r => `<img src="img/personagens/${r}.svg" width="44" height="44" alt="">`).join('')}</span>` : '';
 function renderClues() {
   const box = $('clues');
   if (ch() !== 's1') { box.hidden = true; return; }
@@ -89,7 +90,7 @@ function renderClues() {
   box.hidden = false;
   box.querySelector('summary').textContent = T.cluesTitle(n, cs.length);
   $('clueList').innerHTML = cs.map((c, i) => P().done[i] !== undefined
-    ? `<li class="got"><b>${i+1}.</b> ${esc(c.pista)}</li>`
+    ? `<li class="got">${faces(c)}<b>${i+1}.</b> ${esc(c.pista)}</li>`
     : `<li class="nope"><b>${i+1}.</b> ${T.clueLocked}</li>`).join('');
 }
 function renderCase() {
@@ -198,7 +199,7 @@ function check() {
     $('mText').textContent = c.fim;
     const r = rankName(xp());
     $('mXp').innerHTML = T.mXp(P().done[st.cur.i], xp(), esc(r)) + (rankBefore !== r ? T.promo : '') + (end ? (isS1 ? T.mEndS1 : T.mEnd(C().length)) : '');
-    $('mClue').innerHTML = isS1 ? `<p class="evid">${T.newClue}</p><p class="clue-new">${esc(c.pista)}</p>` : '';
+    $('mClue').innerHTML = isS1 ? `<p class="evid">${T.newClue}</p><p class="clue-new">${faces(c)}${esc(c.pista)}</p>` : '';
     $('mEvid').innerHTML = `<p class="evid">${T.evidence}</p>` + $('result').innerHTML;
     const nextBtn = $('mNext');
     if (!end) { nextBtn.textContent = T.next; nextBtn.dataset.go = 'next'; nextBtn.style.display = ''; }

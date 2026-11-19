@@ -160,6 +160,7 @@ window.CASES_S1 = [
  dicas:[`JOIN moradores e WHERE w.ip = '177.10.0.45' AND w.data IN ('2026-09-20', '2026-10-04', '2026-10-18')`,'GROUP BY m.id HAVING COUNT(DISTINCT w.data) = 3'],
  solucao:`SELECT m.nome\nFROM conexoes_wifi w\nJOIN moradores m ON m.id = w.morador_id\nWHERE w.ip = '177.10.0.45'\n  AND w.data IN ('2026-09-20', '2026-10-04', '2026-10-18')\nGROUP BY m.id\nHAVING COUNT(DISTINCT w.data) = 3;`, ordem:false,
  fim:'Marta Gouveia, a síndica, dona do roteador. E Wagner Dias, o personal trainer, que mora no andar de cima e usa o wi-fi dela sem pedir. Lembra do furto de wi-fi do Prólogo? Pois é. Dois suspeitos, uma rede, e a Sandra conectou três vezes no mesmo dia só para mandar foto de flor.',
+ rostos:['marta','wagner'],
  pista:'Nas três madrugadas, só dois aparelhos estavam no IP 177.10.0.45: o da síndica Marta (dona do roteador) e o do Wagner (que usa o wi-fi dela sem pedir).'},
 
 {titulo:'Caso final: siga o dinheiro',
@@ -170,5 +171,6 @@ window.CASES_S1 = [
  dicas:['WITH RECURSIVE trilha(conta) AS (SELECT \'7781-0\' UNION SELECT t.conta_destino FROM transferencias t JOIN trilha ON t.conta_origem = trilha.conta)','Depois: JOIN contas e moradores, e WHERE NOT EXISTS (SELECT 1 FROM transferencias t WHERE t.conta_origem = trilha.conta)'],
  solucao:`WITH RECURSIVE trilha(conta) AS (\n  SELECT '7781-0'\n  UNION\n  SELECT t.conta_destino\n  FROM transferencias t\n  JOIN trilha ON t.conta_origem = trilha.conta\n)\nSELECT m.nome\nFROM trilha\nJOIN contas c ON c.conta = trilha.conta\nJOIN moradores m ON m.id = c.titular_id\nWHERE NOT EXISTS (\n  SELECT 1 FROM transferencias t WHERE t.conta_origem = trilha.conta\n);`, ordem:false,
  fim:'Marta Gouveia. A síndica. A mesma que, lá no Prólogo, jurava que havia uma "quadrilha organizada" na Vila Nova: era cortina de fumaça. O dinheiro passava pela conta do Wagner, que achou que eram "pagamentos de aulas", ficou com 10% e não perguntou nada (vai ter que explicar). O chip pré-pago e o convite falso tiraram o delegado da vila antes que os extratos chegassem. Buscamos o Bastos na Serra do Esquecimento: bronzeado, com um certificado de "Delegado Destaque" impresso numa gráfica e uma única frase: "Eu sabia que esse banco ia me salvar." Caso encerrado. O Caso do Iogurte, esse continua aberto.',
+ rostos:['marta'],
  pista:'A trilha do dinheiro: 7781-0 (empresa fantasma) → 3320-1 (Wagner, o laranja) → 9054-7 (poupança da síndica Marta Gouveia). Caso encerrado.'}
 ];
